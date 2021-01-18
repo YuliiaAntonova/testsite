@@ -17,7 +17,7 @@ class HomeNews(ListView):
         return context
 
     def get_queryset(self):
-        return News.objects.filter(is_pudlished=True)
+        return News.objects.filter(is_pudlished=True).select_related('category')
 
 class NewsByCategory(ListView):
     template_name = 'news/home_news_list.html'
@@ -30,7 +30,7 @@ class NewsByCategory(ListView):
         return context
 
     def get_queryset(self):
-        return News.objects.filter(category_id=self.kwargs['category_id'],  is_pudlished=True)
+        return News.objects.filter(category_id=self.kwargs['category_id'],  is_pudlished=True).select_related('category')
 
 
 class ViewNews(DetailView):
