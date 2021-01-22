@@ -7,7 +7,24 @@ from .utils import MyMixin
 from .models import News, Category
 from .forms import NewsForm
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Вы успешно зарегистрировались')
+            return redirect('login')
+        else:
+            messages.error(request, 'Ошибка регистрации')
+    else:
+        form = UserCreationForm()
+    return render(request, 'news/register.html', {"form": form})
+
+def login(request):
+    return render(request, 'news/login.html')
 
 def test(request):
     objects = ['john1', 'paul2', 'george3', 'ringo4', 'john5', 'paul6', 'george7']
@@ -22,6 +39,7 @@ class HomeNews(MyMixin, ListView):
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     mixin_prop = 'hello world'
+    paginate_by = 2
     # extra_context = {'title': 'Главная'}
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -37,7 +55,7 @@ class NewsByCategory(MyMixin, ListView):
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     allow_empty = False
-
+    paginate_by = 2
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.get_upper(Category.objects.get(pk= self.kwargs['category_id']))
