@@ -47,7 +47,7 @@ def test(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            mail = send_mail(form.cleaned_data['subject'],form.cleaned_data['content'], 'super.ju4iaann@ukr.net',['ju4iaann@gmail.com'], fail_silently=True)
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'super.ju4iaann@ukr.net', ['ju4iaann@gmail.com'], fail_silently=False)
             if mail:
                 messages.success(request, 'Письмо отправлено!')
                 return redirect('test')
@@ -57,7 +57,6 @@ def test(request):
             messages.error(request, 'Ошибка регистрации')
     else:
         form = ContactForm()
-
     return render(request, 'news/test.html', {"form": form})
 
 
