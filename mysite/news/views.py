@@ -43,14 +43,14 @@ def user_logout(request):
     logout(request)
     return redirect('login')
 
-def test(request):
+def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
             mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'super.ju4iaann@ukr.net', ['ju4iaann@gmail.com'], fail_silently=False)
             if mail:
                 messages.success(request, 'Письмо отправлено!')
-                return redirect('test')
+                return redirect('contact')
             else:
                 messages.error(request, 'Ошибка отправки')
         else:
